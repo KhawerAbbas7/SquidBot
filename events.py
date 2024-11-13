@@ -10,13 +10,18 @@ class Events(commands.Cog):
         self.bot = bot
         self.sticky: Message = None
         self.sticky_debounce: bool = False
-
+        self.Send_Optional_Info: bool = False
+        self.Optional_Info: Embed = Embed(title='Minimum Criteria', description = 'Your Message Should be at least 100 characters long.', colour=Color.PURPLE)
     @commands.Cog.listener('on_message')
     async def on_message(self, message: Message):
 
         if message.author.bot:
             return
-        
+        if message.channel.id in [944294137782481017, 972988561878036540]: # Suggestions Channel and Help Channel Respectively 
+            if len(message.content) <= 100 and message.author.id not in [278094147901194242]: # Samir's id, you can populate it with others
+                await message.delete()
+                if self.Send_Optional_Info:
+                    await message.channel.send(embed = self.Optional_Info, reference= message, mention_author= True, delete_after=5)
         # if bool("chall" in message.content.lower() and len(message.raw_mentions) == 1) or \
         #     bool(message.interaction and message.interaction.name == "challenge"):
             
